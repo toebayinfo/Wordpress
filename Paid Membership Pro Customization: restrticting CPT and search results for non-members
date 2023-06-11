@@ -1,0 +1,22 @@
+// Restrict access to 'papers' custom post type and search results for non-members
+function restrict_content_access($content) {
+    // Check if the current post is of the 'papers' custom post type
+    if (is_singular('papers')) {
+        // Check if the current user is not a member
+        if (!pmpro_hasMembershipLevel('Member')) {
+            // Redirect non-members to the membership checkout page
+            wp_redirect('/membership-account/membership-checkout/');
+            exit();
+        }
+    } elseif (is_search()) {
+        // Check if the current user is not a member
+        if (!pmpro_hasMembershipLevel('Member')) {
+            // Redirect non-members to the membership checkout page
+            wp_redirect('/membership-account/membership-checkout/');
+            exit();
+        }
+    }
+
+    return $content;
+}
+add_filter('the_content', 'restrict_content_access');
