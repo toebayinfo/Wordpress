@@ -1,0 +1,26 @@
+function get_memberpress_quiz_content($atts) {
+    // Extracting the attributes from the shortcode
+    $attributes = shortcode_atts(
+        array(
+            'id' => 0,  // Default value if no ID provided
+        ),
+        $atts
+    );
+
+    // If no ID is provided, return an error message
+    if ($attributes['id'] <= 0) {
+        return 'No valid quiz ID provided!';
+    }
+
+    // Fetch the post content by the ID
+    $post_content = get_post_field('post_content', $attributes['id']);
+
+    // If no content found, return an error message
+    if (!$post_content) {
+        return 'No content found for the given quiz ID!';
+    }
+
+    return do_shortcode($post_content);
+}
+
+add_shortcode('mp_quiz_content', 'get_memberpress_quiz_content');
