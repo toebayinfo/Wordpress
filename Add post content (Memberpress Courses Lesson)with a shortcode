@@ -1,0 +1,19 @@
+function embed_lesson_content($atts) {
+    // Extract the attributes passed to the shortcode
+    $args = shortcode_atts(array(
+        'id' => null, // Default is null. Make sure you pass an ID in the shortcode.
+    ), $atts);
+    
+    if (!$args['id']) {
+        return 'Please provide a valid lesson ID.'; // Error message if no ID is provided.
+    }
+
+    $post = get_post($args['id']);
+    if ($post && $post->post_type == 'post' && $post->post_status == 'publish') { // Replace 'post' with the actual post type of your lessons if it's different.
+        return apply_filters('the_content', $post->post_content);
+    }
+    
+    return 'Lesson not found.'; // Error message if the lesson with the given ID doesn't exist.
+}
+
+add_shortcode('embed_lesson', 'embed_lesson_content');
