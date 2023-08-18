@@ -1,0 +1,22 @@
+function wpb_recently_registered_users() { 
+    global $wpdb;
+
+    $recentusers = '';  // Initialize as an empty string
+
+    $usernames = $wpdb->get_results("SELECT user_nicename, user_url, user_email FROM $wpdb->users ORDER BY ID DESC LIMIT 5");
+
+    foreach ($usernames as $username) {
+        if (!$username->user_url) :
+            $recentusers .= '<div>' . get_avatar($username->user_email, 45) . ' ' . $username->user_nicename . '</div>';
+        else :
+            $recentusers .= '<div>' . get_avatar($username->user_email, 45) . ' <a href="' . $username->user_url . '">' . $username->user_nicename . '</a></div>';
+        endif;
+    }
+
+    return $recentusers;
+}
+
+function register_recent_users_shortcode() {
+    add_shortcode('recent_users', 'wpb_recently_registered_users');
+}
+add_action('init', 'register_recent_users_shortcode');
