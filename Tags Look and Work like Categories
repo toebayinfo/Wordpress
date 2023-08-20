@@ -1,0 +1,11 @@
+function modify_post_tag_taxonomy() {
+    if ( taxonomy_exists('post_tag') ) {
+        global $wp_taxonomies;
+        $wp_taxonomies['post_tag']->hierarchical = true;
+        $wp_taxonomies['post_tag']->rewrite['hierarchical'] = true;
+        $wp_taxonomies['post_tag']->show_admin_column = true;
+        $wp_taxonomies['post_tag']->show_in_rest = true; // This ensures it works with Gutenberg
+        $wp_taxonomies['post_tag']->labels->name = 'Hierarchical Tags';
+    }
+}
+add_action( 'init', 'modify_post_tag_taxonomy', 11 );
