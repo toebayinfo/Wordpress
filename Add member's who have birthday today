@@ -9,12 +9,9 @@ function display_today_birthdays_shortcode() {
         "SELECT user_id, meta_value as birthday FROM {$wpdb->usermeta} WHERE meta_key = 'user_birthday'"
     );
 
-    $output = '';
-    $has_birthdays = false;
-
+    $usernames_list = [];
+    
     if (!empty($users_with_birthdays)) {
-        $output .= '<ul>';
-        
         foreach ($users_with_birthdays as $user_data) {
             $stored_month = str_pad(substr($user_data->birthday, 4, 2), 2, "0", STR_PAD_LEFT);
             $stored_day = str_pad(substr($user_data->birthday, 6, 2), 2, "0", STR_PAD_LEFT);
@@ -23,13 +20,15 @@ function display_today_birthdays_shortcode() {
             if ($stored_month_day === $today_month_day) {
                 $user = get_userdata($user_data->user_id);
                 $user_link = "https://isrblog.space/category/blog-{$user->user_login}/"; // Creating the user-specific link
-                $output .= '<li><a href="' . $user_link . '">' . $user->user_login . '</a></li>'; // Displaying only the username and linking it to their page
-                $has_birthdays = true;
+                $usernames_list[] = '<a href="' . $user_link . '">' . $user->user_login . '</a>'; 
             }
         }
-        $output .= '</ul>';
 
-        if (!$has_birthdays) {
+        // Combine user names separated by commas
+        $output = implode(', ', $usernames_list);
+
+        // If there are no birthdays, display a default message
+        if (empty($usernames_list)) {
             $output = 'No users have birthdays today.';
         }
     } else {
