@@ -1,0 +1,17 @@
+function hide_require_membership_for_authors() {
+    // Only run this script in the admin area.
+    if( is_admin() ) {
+        // Get the current user.
+        $current_user = wp_get_current_user();
+        if( in_array( 'author', (array) $current_user->roles ) ) {
+            // The user has the "author" role.
+            echo '<style>
+                /* This is a guess. You'll have to inspect the element to find its exact ID or class. */
+                .edit-post-meta-boxes-area {
+                    display: none;
+                }
+            </style>';
+        }
+    }
+}
+add_action( 'admin_head', 'hide_require_membership_for_authors' );
