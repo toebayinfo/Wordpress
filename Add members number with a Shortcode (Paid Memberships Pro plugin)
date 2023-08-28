@@ -1,0 +1,11 @@
+function get_pmp_active_members_count() {
+    global $wpdb;
+    $count = $wpdb->get_var("SELECT COUNT(user_id) FROM {$wpdb->pmpro_memberships_users} WHERE status = 'active'");
+    return $count;
+}
+
+function pmp_active_members_shortcode() {
+    $total_members = get_pmp_active_members_count();
+    return 'We have ' . $total_members . ' active members!';
+}
+add_shortcode('pmp_active_members', 'pmp_active_members_shortcode');
