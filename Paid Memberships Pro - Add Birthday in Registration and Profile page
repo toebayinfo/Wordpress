@@ -1,0 +1,24 @@
+//PMP birthday field in the Registration page
+function my_pmprorh_init_date_example_birthday_field() {
+	// don't break if Register Helper is not loaded
+	if ( ! function_exists( 'pmprorh_add_registration_field' ) ) {
+		return false;
+	}
+
+	// define the birthday field
+	$field = new PMProRH_Field(
+		'birthday',         // input name, will also be used as meta key
+		'date',             // input type
+		array(
+			'label'   => 'Birthday',
+			'profile' => true,
+			'required' => true
+		)
+	);
+
+	pmprorh_add_registration_field(
+		'checkout_boxes',  // location on checkout page
+		$field             // field object
+	);
+}
+add_action( 'init', 'my_pmprorh_init_date_example_birthday_field' );
