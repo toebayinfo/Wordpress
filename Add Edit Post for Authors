@@ -1,0 +1,19 @@
+//Add an Edit Post button for Author - Exclude from it all others
+function add_edit_post_link_at_the_top() {
+    // Check if the user is logged in and has the 'edit_posts' capability
+    global $post;
+if (is_single() && is_user_logged_in() && current_user_can('edit_posts') && get_current_user_id() == $post->post_author) {
+        // Display the edit link for the current post
+        edit_post_link('Edit Post', '<p class="top-edit-link">', '</p>');
+    }
+}
+
+function prepend_edit_post_link_to_content($content) {
+    ob_start();
+    add_edit_post_link_at_the_top();
+    $edit_link = ob_get_clean();
+    
+    // Prepend the edit link to the content
+    return $edit_link . $content;
+}
+add_filter('the_content', 'prepend_edit_post_link_to_content');
