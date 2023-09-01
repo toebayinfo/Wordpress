@@ -3,13 +3,14 @@ function wpb_recently_registered_users() {
 
     $recentusers = '';  // Initialize as an empty string
 
-    $usernames = $wpdb->get_results("SELECT user_nicename, user_url, user_email FROM $wpdb->users ORDER BY ID DESC LIMIT 5");
+    // Fetching display_name instead of user_nicename
+    $usernames = $wpdb->get_results("SELECT display_name, user_url, user_email FROM $wpdb->users ORDER BY ID DESC LIMIT 5");
 
-    foreach ($usernames as $username) {
-        if (!$username->user_url) :
-            $recentusers .= '<div>' . get_avatar($username->user_email, 45) . ' ' . $username->user_nicename . '</div>';
+    foreach ($usernames as $user) {
+        if (!$user->user_url) :
+            $recentusers .= '<div>' . get_avatar($user->user_email, 45) . ' ' . $user->display_name . '</div>';
         else :
-            $recentusers .= '<div>' . get_avatar($username->user_email, 45) . ' <a href="' . $username->user_url . '">' . $username->user_nicename . '</a></div>';
+            $recentusers .= '<div>' . get_avatar($user->user_email, 45) . ' <a href="' . $user->user_url . '">' . $user->display_name . '</a></div>';
         endif;
     }
 
