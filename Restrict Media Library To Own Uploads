@@ -1,0 +1,8 @@
+function restrict_media_library_to_own_uploads($query) {
+    global $current_user;
+    if ( ! current_user_can('edit_others_posts') ) {
+        $query['author'] = $current_user->ID;
+    }
+    return $query;
+}
+add_filter('ajax_query_attachments_args', 'restrict_media_library_to_own_uploads');
